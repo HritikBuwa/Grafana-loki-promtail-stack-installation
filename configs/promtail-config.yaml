@@ -1,0 +1,26 @@
+# =============================================================================
+# promtail-config.yaml
+# Default Promtail Docker configuration
+# Downloaded from: https://github.com/grafana/loki (v2.8.0)
+# Promtail ships logs from /var/log → Loki
+# =============================================================================
+
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+# Points to the Loki container (linked via --link loki)
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: system
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: varlogs
+          __path__: /var/log/*log
